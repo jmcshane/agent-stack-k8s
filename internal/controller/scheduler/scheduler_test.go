@@ -127,9 +127,9 @@ func TestTagEnv(t *testing.T) {
 }
 
 func assertEnvFieldPath(t *testing.T, container corev1.Container, envVarName, fieldPath string) {
-	env := findEnv(t, container.Env, envVarName)
-
 	t.Helper()
+
+	env := findEnv(t, container.Env, envVarName)
 	if assert.NotNil(t, env) {
 		assert.Equal(t, env.Value, "")
 		hasFieldRef := assert.NotNil(t, env.ValueFrom) && assert.NotNil(t, env.ValueFrom.FieldRef)
@@ -137,7 +137,6 @@ func assertEnvFieldPath(t *testing.T, container corev1.Container, envVarName, fi
 			assert.Equal(t, env.ValueFrom.FieldRef.FieldPath, fieldPath)
 		}
 	}
-
 }
 
 func TestJobWithNoKubernetesPlugin(t *testing.T) {
@@ -206,10 +205,13 @@ func findContainer(t *testing.T, containers []corev1.Container, name string) cor
 }
 
 func findEnv(t *testing.T, envs []corev1.EnvVar, name string) *corev1.EnvVar {
+	t.Helper()
+
 	for _, env := range envs {
 		if env.Name == name {
 			return &env
 		}
 	}
+
 	return nil
 }
